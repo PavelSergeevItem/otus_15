@@ -243,6 +243,6 @@ node=web type=CONFIG_CHANGE msg=audit(1687960942.146:1488): auid=4294967295 ses=
 node=web type=CONFIG_CHANGE msg=audit(1687960942.146:1489): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=add_rule key="nginx_conf" list=4 res=1
 node=web type=SERVICE_START msg=audit(1687960942.153:1490): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=auditd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
 ```
-Задание выполенно.
+Задание выполнено.
 
 
