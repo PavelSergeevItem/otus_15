@@ -214,5 +214,35 @@ port = 60
 Перезаупстил службу auditd: `service auditd restart`.
 Перешл на лог-сервер и открыл порт TCP 60, для этого раскомментировал в файле etc/audit/auditd.conf строку `tcp_listen_port = 60`.
 Перезапустил службу `service auditd restart`.
-Для провер
+Для проверки работы пересылки логов, перешел на внось веб-сервер и внес изменения в файлах nginx:
+```
+[root@web nginx]# ls -l /etc/nginx/nginx.conf
+-rwxr-xr-x. 1 root root 2495 Jun 27 11:01 /etc/nginx/nginx.conf
+[root@web ~]# chmod +x /etc/nginx/nginx.conf
+[root@web nginx]# ls -l /etc/nginx/nginx.conf
+-rwxr-xr-x. 1 root root 2495 Jun 28 11:01 /etc/nginx/nginx.conf
+```
+Перешел на лог-сервер и проверил, что логи пересылаются:
+```
+grep web /var/log/audit/audit.log
+node=web type=DAEMON_START msg=audit(1687960921.557:69): op=start ver=2.8.5 format=raw kernel=3.10.0-1127.el7.x86_64 auid=4294967295 pid=24446 uid=0 ses=4294967295 subj=system_u:system_r:auditd_t:s0 res=success
+node=web type=CONFIG_CHANGE msg=audit(1687960921.698:1473): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=remove_rule key="nginx_conf" list=4 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960921.698:1474): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=remove_rule key="nginx_conf" list=4 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960921.706:1475): audit_backlog_limit=8192 old=8192 auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960921.706:1476): audit_failure=1 old=1 auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960921.706:1477): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=add_rule key="nginx_conf" list=4 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960921.706:1478): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=add_rule key="nginx_conf" list=4 res=1
+node=web type=SERVICE_START msg=audit(1687960921.706:1479): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=auditd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+node=web type=DAEMON_END msg=audit(1687960940.969:70): op=terminate auid=1000 pid=24477 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 res=success
+node=web type=DAEMON_START msg=audit(1687960942.009:5986): op=start ver=2.8.5 format=raw kernel=3.10.0-1127.el7.x86_64 auid=4294967295 pid=24494 uid=0 ses=4294967295 subj=system_u:system_r:auditd_t:s0 res=success
+node=web type=CONFIG_CHANGE msg=audit(1687960942.143:1484): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=remove_rule key="nginx_conf" list=4 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960942.143:1485): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=remove_rule key="nginx_conf" list=4 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960942.145:1486): audit_backlog_limit=8192 old=8192 auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960942.145:1487): audit_failure=1 old=1 auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960942.146:1488): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=add_rule key="nginx_conf" list=4 res=1
+node=web type=CONFIG_CHANGE msg=audit(1687960942.146:1489): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=add_rule key="nginx_conf" list=4 res=1
+node=web type=SERVICE_START msg=audit(1687960942.153:1490): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=auditd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+```
+Задание выполенно.
+
 
